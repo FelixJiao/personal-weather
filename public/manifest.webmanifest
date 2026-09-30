@@ -1,0 +1,1 @@
+{"name":"知天气 · 为你的每一天","short_name":"知天气","start_url":"./","scope":"./","display":"standalone","background_color":"#131e39","theme_color":"#131e39","lang":"zh-CN","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"},{"src":"apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any"}]}

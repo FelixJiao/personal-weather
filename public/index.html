@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#131e39">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="知天气">
+  <meta name="description" content="懂你日常的天气预报。查看实时天气、逐小时与七天预报、空气质量和生活建议。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <title>知天气 · 为你的每一天</title>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✳</span><span>知天气</span></div>
+      <button class="round-button" id="settings-button" type="button" aria-label="打开偏好设置">⚙</button>
+    </header>
+
+    <main id="main">
+      <div class="location-row">
+        <button class="location-button" id="city-button" type="button" aria-label="选择城市">
+          <span class="pin" aria-hidden="true">⌖</span><span id="city-name">北京</span><span class="chevron" aria-hidden="true">⌄</span>
+        </button>
+        <span id="local-time" class="local-time"></span>
+      </div>
+      <div id="saved-cities" class="saved-cities" aria-label="常用城市"></div>
+
+      <section class="hero" aria-labelledby="weather-summary">
+        <div class="hero-glow"></div>
+        <div class="hero-top"><span id="day-label">今天</span><span id="updated-at">正在获取天气…</span></div>
+        <div class="hero-weather" aria-hidden="true"><span id="hero-icon">☀️</span></div>
+        <div class="hero-temperature"><span id="current-temp">--</span><span class="temp-unit" id="hero-unit">°</span></div>
+        <h1 id="weather-summary">正在加载</h1>
+        <p class="feels-like" id="feels-like">请稍候，正在获取最新预报</p>
+        <div class="hero-range"><span id="temp-range">最高 --° · 最低 --°</span><span class="range-divider"></span><span id="hero-rain">降水概率 --%</span></div>
+      </section>
+
+      <div class="briefing" id="briefing" role="status">
+        <span class="briefing-icon" aria-hidden="true">✦</span>
+        <p id="briefing-text">正在为你整理今天的天气建议…</p>
+      </div>
+
+      <section class="panel" aria-labelledby="hourly-title">
+        <div class="section-head"><div><p class="eyebrow">接下来的天气</p><h2 id="hourly-title">逐小时预报</h2></div><span class="head-icon" aria-hidden="true">◷</span></div>
+        <div class="hourly-scroll" id="hourly-list" aria-label="逐小时预报"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="daily-title">
+        <div class="section-head"><div><p class="eyebrow">提前安排一周</p><h2 id="daily-title">未来 7 天</h2></div><span class="head-icon" aria-hidden="true">▦</span></div>
+        <div id="daily-list" class="daily-list"></div>
+      </section>
+
+      <section class="highlights" aria-labelledby="highlights-title">
+        <div class="section-head outside"><div><p class="eyebrow">天气细节</p><h2 id="highlights-title">今日看点</h2></div></div>
+        <div class="highlight-grid">
+          <article class="small-panel air-card"><div class="small-head"><span>空气质量</span><span aria-hidden="true">◎</span></div><strong id="aqi-value">--</strong><span class="metric-unit">AQI</span><p id="aqi-note">正在获取</p><div class="aqi-track"><span id="aqi-fill"></span></div></article>
+          <article class="small-panel"><div class="small-head"><span>体感温度</span><span aria-hidden="true">♨</span></div><strong id="feels-value">--°</strong><p id="feels-note">根据温度与湿度计算</p></article>
+          <article class="small-panel"><div class="small-head"><span>湿度</span><span aria-hidden="true">◌</span></div><strong id="humidity-value">--%</strong><p id="humidity-note">当前相对湿度</p></article>
+          <article class="small-panel"><div class="small-head"><span>日出日落</span><span aria-hidden="true">◐</span></div><div class="sun-times"><strong id="sunrise-value">--:--</strong><span>日出</span><strong id="sunset-value">--:--</strong><span>日落</span></div></article>
+        </div>
+      </section>
+
+      <section class="panel life-panel" aria-labelledby="life-title"><div class="section-head"><div><p class="eyebrow">为你而想</p><h2 id="life-title">生活建议</h2></div><span class="head-icon" aria-hidden="true">✦</span></div><div class="life-list" id="life-list"></div></section>
+      <section class="warning-panel" id="warning-panel" hidden aria-labelledby="warning-title"><div class="warning-heading">⚠ <h2 id="warning-title">天气预警</h2></div><div id="warning-list"></div></section>
+      <p class="source-credit">天气数据由和风天气提供 · <span id="footer-updated">更新中</span></p>
+    </main>
+  </div>
+
+  <div class="sheet-backdrop" id="search-backdrop" hidden></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-labelledby="search-title" hidden>
+    <div class="sheet-handle"></div><div class="sheet-title-row"><h2 id="search-title">选择城市</h2><button class="close-button" id="search-close" type="button" aria-label="关闭">×</button></div>
+    <div class="search-input-wrap"><span aria-hidden="true">⌕</span><input id="city-search" type="search" placeholder="搜索城市，例如 杭州" autocomplete="off" enterkeyhint="search" aria-label="搜索城市"></div>
+    <button id="locate-button" class="locate-button" type="button"><span aria-hidden="true">⌖</span><span>定位当前城市</span><span aria-hidden="true">→</span></button>
+    <p class="sheet-caption" id="search-caption">常用城市</p><div class="search-results" id="search-results"></div>
+  </section>
+
+  <div class="sheet-backdrop" id="settings-backdrop" hidden></div>
+  <section class="sheet settings-sheet" id="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+    <div class="sheet-handle"></div><div class="sheet-title-row"><h2 id="settings-title">显示偏好</h2><button class="close-button" id="settings-close" type="button" aria-label="关闭">×</button></div>
+    <p class="sheet-caption">温度单位</p><div class="segmented" role="group" aria-label="温度单位"><button type="button" data-unit="c">摄氏 °C</button><button type="button" data-unit="f">华氏 °F</button></div>
+    <p class="sheet-caption">外观</p><div class="segmented" role="group" aria-label="外观"><button type="button" data-theme="auto">自动</button><button type="button" data-theme="dark">深色</button><button type="button" data-theme="light">浅色</button></div>
+    <p class="settings-hint">偏好保存在这台设备上。将页面添加到 iPhone 主屏幕，可像应用一样打开。</p>
+  </section>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
